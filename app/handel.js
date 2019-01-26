@@ -316,7 +316,7 @@ function log(info) {
 function checkUpdate() {
     const request = require('request');
     var options = {
-        url: 'https://raw.githubusercontent.com/confernn/tf2-handel/master/package.json',
+        url: 'https://raw.githubusercontent.com/offish/tf2-handel/master/package.json',
         method: 'GET',
     };
     function look(error, JSONresponse, body) {
