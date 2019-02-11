@@ -159,8 +159,7 @@ function escrow(offer) {
 }
 
 function isTF2(item) {
-    if(item.appid == 440) return true
-    else return false
+    return item.appid == 440;
 }
 
 // This function process the trade offer
