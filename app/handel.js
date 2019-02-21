@@ -73,6 +73,12 @@ client.on('webSession', (sessionid, cookies) => {
 
 const commands = [ 'help','price','group','owner','donate','discord','classifieds','commands' ]
 
+let list = '';
+
+for(var c in commands) {
+    list = '\n' + command[c];
+}
+
 client.on("friendMessage", (steamID, message) => {
     hasPrefix(message);
     if(msg.toLowerCase().startsWith("price")) { 
@@ -123,7 +129,9 @@ client.on("friendMessage", (steamID, message) => {
 
 function accept(offer) {
     offer.accept((err) => {
-        if(err) print(`${log('err')} ${err}`);
+        if(err)
+            print(`${log('err')} ${err}`);
+
         if(offer.itemsToGive.length > 0) {
             community.checkConfirmations();
         }
