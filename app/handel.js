@@ -55,7 +55,7 @@ checkUpdate();
 client.on('loggedOn', (details, parental) => {
     client.getPersonas([client.steamID], (personas) => {
         print(`${log('info')} Logged in as ${personas[client.steamID].player_name}`);
-        client.setPersona(SteamUser.Steam.EPersonaState.LookingToTrade, config.bot.name);
+        client.setPersona(SteamUser.Steam.EPersonaState[config.bot.persona], config.bot.name);
         if (config.optional.game) 
             client.gamesPlayed([package.name, config.optional.game])
         else 
@@ -71,16 +71,7 @@ client.on('webSession', (sessionid, cookies) => {
     community.setCookies(cookies);
 });
 
-const commands = [
-    'help',
-    '\nprice',
-    '\ngroup',
-    '\nowner',
-    '\ndonate',
-    '\ndiscord',
-    '\nclassifieds',
-    '\ncommands' 
-]
+const commands = [ 'help','price','group','owner','donate','discord','classifieds','commands' ]
 
 client.on("friendMessage", (steamID, message) => {
     hasPrefix(message);
@@ -158,9 +149,6 @@ function escrow(offer) {
     });
 }
 
-function isTF2(item) {
-    return item.appid == 440;
-}
 
 // This function process the trade offer
 function process(offer) {
@@ -215,54 +203,6 @@ function process(offer) {
     } else {
         decline(offer);
     }
-}
-
-function isCraftable(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function isCraftWeapon(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function isUnusual(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function getEffect(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function isSkin(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function getSkin(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function getWear(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function getLevel(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function getEffect(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function isPainted(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function isTradingCard(item) {
-    // Might introduced in a later update, still unsure if I should add it.
-}
-
-function getGemAmount(item) {
-    // Might introduced in a later update, still unsure if I should add it.
 }
 
 function verify() {
