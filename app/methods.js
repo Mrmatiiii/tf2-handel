@@ -3,6 +3,11 @@ const config = require('./config')
 
 
 var t = module.exports = {
+    log: function(info) {
+        return `${package.name} | `.green + `${moment().format('LTS')} `+
+        `${info == "info" ? info.green : ""+info == "trade" ? info.magenta : ""+info == "warn" ? info.yellow : ""}:`
+    },
+    
     isDonation: function(offer) {
         return offer.itemsToGive.length === 0 && offer.itemsToReceive.length > 0;
     },
