@@ -60,9 +60,7 @@ client.on('loggedOn', (details, parental) => {
             client.gamesPlayed([package.name, config.optional.game])
         else 
             client.gamesPlayed([package.name])
-        setTimeout(() => {
-            verify()
-        }, 1000)
+        setTimeout(() verify, 1000)
     });
 });
 
@@ -74,10 +72,9 @@ client.on('webSession', (sessionid, cookies) => {
 const commands = [ 'help','price','group','owner','donate','discord','classifieds','commands' ]
 
 let list = '';
+for(var c in commands)
+    list += '\n' + commands[c];
 
-for(var c in commands) {
-    list = '\n' + command[c];
-}
 
 client.on("friendMessage", (steamID, message) => {
     hasPrefix(message);
