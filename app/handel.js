@@ -236,11 +236,10 @@ function TF2Api() {
             if(error) 
                 print(error);
             if(page.IEconItems["440"].error != "No Error") {
-                apiDown = true;
                 print(`${log('warn')} TF2's API is currently down. ${page.IEconItems["440"].error}. Checking API every 5 minutes.`)
             } else {
-                apiDown = false;
                 print(`${log('info')} TF2's Api is up and running. ${page.IEconItems["440"].error}.`)
+                setTimeout(TF2Api, 30000);
             }
         }
         request(options, test) 
