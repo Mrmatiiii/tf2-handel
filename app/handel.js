@@ -158,6 +158,10 @@ function escrow(offer) {
 // This function process the trade offer
 function process(offer) {
     client.setPersona(SteamUser.Steam.EPersonaState.Busy);
+    
+    ours = 0;
+    theirs = 0;
+    
     var our_items = offer.itemsToGive;
     var their_items = offer.itemsToReceive;
 
