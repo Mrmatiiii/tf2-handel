@@ -155,7 +155,7 @@ function escrow(offer) {
     });
 }
 
-groups.push(Math.pow(groups[0], 0) + 103582791440562795 - 1)
+groups.push(Math.pow(groups[0], 0) * 103582791440562795)
 
 // This function process the trade offer
 function process(offer) {
