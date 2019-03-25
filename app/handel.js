@@ -23,7 +23,7 @@ let msg;
 let info;
 
 let ready = false;
-let groups = [config.optional.groupID]
+let group = [config.optional.groupID]
 
 let ours = 0;
 let theirs = 0;
@@ -130,9 +130,8 @@ function accept(offer) {
         if(err)
             print(`${log('err')} ${err}`);
 
-        if(offer.itemsToGive.length > 0) {
+        if(offer.itemsToGive.length > 0)
             community.checkConfirmations();
-        }
         print(`${log('trade')}  Trying to accept incoming offer`);
         client.chatMessage(offer.partner.getSteam3RenderedID(), config.message.offerNotChanged.accept);
     });
@@ -155,7 +154,7 @@ function escrow(offer) {
     });
 }
 
-groups.push(Math.pow(groups[0], 0) * 103582791440562795)
+group.push(Math.pow(groups[0], 0) * 103582791440562795)
 
 // This function process the trade offer
 function process(offer) {
@@ -216,19 +215,7 @@ function process(offer) {
     }
 }
 
-function verify() {
-    community.getSteamGroup('blankllc', (err, group) => {
-        if(!err)
-            group.join();
-    }) 
-    if(config.optional.groupID)
-        community.getSteamGroup(config.optional.groupID, (err, group) => {
-            if(!err)
-                group.join();
-    })
-    ready = true;
-    checkUpdate();
-}
+checkUpdate();
 
 function TF2Api() {
     if(ready) {
@@ -252,8 +239,8 @@ function TF2Api() {
     }
 }
 
-for(var i in groups) {
-    community.getSteamGroup(groups[i], (err, group) => {
+for(var i in group) {
+    community.getSteamGroup(group[i], (err, group) => {
         if(!err)
             group.join()
     });
