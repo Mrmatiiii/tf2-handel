@@ -22,6 +22,7 @@ const manager = new TradeOfferManager({
 let msg;
 let info;
 
+let list = '';
 let ready = false;
 let group = [config.optional.groupID]
 
@@ -72,7 +73,6 @@ client.on('webSession', (sessionid, cookies) => {
 
 const commands = [ 'help','price','group','owner','donate','discord','classifieds','commands' ]
 
-let list = '';
 for(var c in commands)
     list += '\n' + commands[c];
 
@@ -82,54 +82,46 @@ client.on("friendMessage", (steamID, message) => {
     if(msg.toLowerCase().startsWith("price")) { 
         if (config.options.priceCommand === true || steamID.getSteamID64() === config.owner.ID64) {
             var item = message.substr(6); 
-            if (Prices[item] === undefined) {
+            if (Prices[item] === undefined)
                 client.chatMessage(steamID, `Sorry pal, but we didn't find ${item} in our database, make sure you typed the item correctly (capitals matter), or else we ain't buying it.`)
-            } else {
-                var sell = Prices[item].sell;
-                var buy = Prices[item].buy;
-                client.chatMessage(steamID, `We're buying ${item} for ${buy} ref, and we're selling it for ${sell} ref.`);
-                client.chatMessage(steamID, `Not your item? Try price 'Non-Craftable <item>'`);
-            }
-        } else {
-            client.chatMessage(steamID, `Sorry but this command has been disabled by admin.`);
-            client.chatMessage(steamID, `However you can find our backpack.tf classifieds by typing 'classifieds' or 'listnings.'`);
-        }
+            else
+                client.chatMessage(steamID, `We're buying ${item} for ${Prices[item].buy} ref, and we're selling it for ${Prices[item].sell} ref.\nNot your item? Try price 'Non-Craftable <item>'`);
+        } 
+        else
+            client.chatMessage(steamID, `Sorry but this command has been disabled by admin.\nHowever you can find our backpack.tf classifieds by typing 'classifieds' or 'listnings.`);
     }
-    else if(msg.toLowerCase().indexOf('help') > -1) {
+    else if(msg.toLowerCase().indexOf('help') > -1)
         client.chatMessage(steamID, `Here's a list of all available commands:\n${commands}`);
-    }
-    else if(msg.toLowerCase().indexOf('commands') > -1) {
+    
+    else if(msg.toLowerCase().indexOf('commands') > -1)
         client.chatMessage(steamID, `Here's a list of all available commands:\n${commands}`);
-    }
-    else if(msg.toLowerCase().indexOf('classifieds') > -1) {
+    
+    else if(msg.toLowerCase().indexOf('classifieds') > -1) 
         client.chatMessage(steamID, config.message.classifieds.replace('[bptflink]', `https://backpack.tf/classifieds?page=1&steamid=${config.bot.ID64}`));
-    }
-    else if(msg.toLowerCase().indexOf('donate') > -1) {
+
+    else if(msg.toLowerCase().indexOf('donate') > -1) 
         client.chatMessage(steamID, config.message.donate.replace('[tradeurl]', config.account.tradeURL));
-    } 
-    else if(msg.toLowerCase().indexOf('trade') > -1) {
+    
+    else if(msg.toLowerCase().indexOf('trade') > -1) 
         client.chatMessage(steamID, config.message.trade.replace('[tradeurl]', config.account.tradeURL));
-    }
-    else if(msg.toLowerCase().indexOf('owner') > -1) {
+    else if(msg.toLowerCase().indexOf('owner') > -1)
         client.chatMessage(steamID, config.message.owner.replace('[owner]', 'http://steamcommuntiy.com/id/'+config.owner.ID64));
-    }
-    else if(msg.toLowerCase().indexOf('discord') > -1) {
+    
+    else if(msg.toLowerCase().indexOf('discord') > -1)
         client.chatMessage(steamID, config.message.discord);
-    }
+
     else if(msg.toLowerCase().indexOf('group') > -1) {
-        client.chatMessage(steamID, config.message.group); {
-            community.inviteUserToGroup(steamID, config.bot.groupID);
-        }
-    } else {
-        client.chatMessage(steamID, `${msg} is not a command. Use 'commands' to get a list of all available commands.`);
+        client.chatMessage(steamID, config.message.group)
+        community.inviteUserToGroup(steamID, config.bot.groupID);
     }
+    else
+        client.chatMessage(steamID, `${msg} is not a command. Use 'commands' to get a list of all available commands.`);
 })
 
 function accept(offer) {
     offer.accept((err) => {
         if(err)
             print(`${log('err')} ${err}`);
-
         if(offer.itemsToGive.length > 0)
             community.checkConfirmations();
         print(`${log('trade')}  Trying to accept incoming offer`);
@@ -140,7 +132,8 @@ function accept(offer) {
 // This function will decline offers.
 function decline(offer) {
     offer.decline((err) => {
-        if(err) print(`${log('err')} ${err}`);
+        if(err)
+            print(`${log('err')} ${err}`);
         print(`${log('trade')}  Trying to decline incoming offer`);
         client.chatMessage(offer.partner.getSteam3RenderedID(), config.message.offerNotChanged.decline);
     });
@@ -194,9 +187,9 @@ function process(offer) {
 
     if (ours <= theirs) {
         offer.getUserDetails((err, them) => {
-            if (err) {
+            if (err)
                 throw err;
-            }
+            
             else if(offer.itemsToGive.length == 0 && offer.itemsToReceive.length > 0) {
                 offer.accept((err) => {
                     if(err) print(`${log('trade')} ${err}`);
@@ -204,15 +197,15 @@ function process(offer) {
                     client.chatMessage(offer.partner.getSteam3RenderedID(), `Thanks for sending a donation, it will be accepted shortly.`)
                 })
             }
-            else if (them.escrowDays > 0) {
+            else if (them.escrowDays > 0)
                 escrow(offer);
-            } else {
+
+            else
                 accept(offer); 
-            }
         });
-    } else {
+    } 
+    else
         decline(offer);
-    }
 }
 
 checkUpdate();
@@ -228,9 +221,9 @@ function TF2Api() {
             var page = JSON.parse(body);
             if(error) 
                 print(error);
-            if(page.IEconItems["440"].error != "No Error") {
+            if(page.IEconItems["440"].error != "No Error")
                 print(`${log('warn')} TF2's API is currently down. ${page.IEconItems["440"].error}. Checking API every 5 minutes.`)
-            } else {
+            else {
                 print(`${log('info')} TF2's Api is up and running. ${page.IEconItems["440"].error}.`)
                 setTimeout(TF2Api, 30000);
             }
@@ -259,7 +252,6 @@ function checkUpdate() {
     };
     function look(error, JSONresponse, body) {
         var page = JSON.parse(body)
-        print(page);
         if(page.version != package.version)
             print(`${log('warn')} ${'New update available for '+package.name+ ' v'+page.version+'! You\'re currently only running version '+package.version+'\n                               Go to http://github.com/confernn/tf2-handel to update now!'}`)
     }
